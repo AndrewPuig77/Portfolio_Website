@@ -36,6 +36,306 @@ body {
         radial-gradient(circle at 75% 75%, #00ffff33 0%, transparent 50%),
         linear-gradient(180deg, #000000 0%, #1a0d26 50%, #000000 100%);
     background-attachment: fixed;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Full-Screen Animated Background */
+.global-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0; /* Behind everything but visible */
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Background Grid */
+.bg-grid {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    background-image: 
+        linear-gradient(rgba(255, 0, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 0, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 100px 100px, 100px 100px, 50px 50px, 50px 50px;
+    animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(100px, 100px); }
+}
+
+/* Background Shapes */
+.bg-shapes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.bg-shape {
+    position: absolute;
+    border: 2px solid;
+    opacity: 0.6 !important;
+    visibility: visible !important;
+    animation: bgShapeFloat 15s ease-in-out infinite;
+}
+
+.bg-shape-1 {
+    width: 80px;
+    height: 80px;
+    border-color: #ff00ff;
+    top: 10%;
+    left: 5%;
+    transform: rotate(45deg);
+    animation-delay: 0s;
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+}
+
+.bg-shape-2 {
+    width: 60px;
+    height: 60px;
+    border-color: #00ffff;
+    top: 20%;
+    right: 10%;
+    border-radius: 50%;
+    animation-delay: 2s;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+.bg-shape-3 {
+    width: 0;
+    height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    border-bottom: 60px solid rgba(255, 0, 128, 0.6);
+    top: 60%;
+    left: 15%;
+    animation-delay: 4s;
+    filter: drop-shadow(0 0 10px rgba(255, 0, 128, 0.3));
+}
+
+.bg-shape-4 {
+    width: 70px;
+    height: 70px;
+    border-color: #8a2be2;
+    top: 40%;
+    right: 20%;
+    transform: rotate(30deg);
+    animation-delay: 6s;
+    box-shadow: 0 0 18px rgba(138, 43, 226, 0.3);
+}
+
+.bg-shape-5 {
+    width: 50px;
+    height: 50px;
+    border-color: #39ff14;
+    top: 70%;
+    left: 60%;
+    transform: rotate(60deg);
+    animation-delay: 8s;
+    box-shadow: 0 0 12px rgba(57, 255, 20, 0.3);
+}
+
+.bg-shape-6 {
+    width: 90px;
+    height: 90px;
+    border-color: #ff0080;
+    top: 80%;
+    right: 5%;
+    border-radius: 50%;
+    animation-delay: 10s;
+    box-shadow: 0 0 25px rgba(255, 0, 128, 0.3);
+}
+
+.bg-shape-7 {
+    width: 40px;
+    height: 40px;
+    border-color: #00ffff;
+    top: 30%;
+    left: 80%;
+    animation-delay: 12s;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.bg-shape-8 {
+    width: 65px;
+    height: 65px;
+    border-color: #ff00ff;
+    top: 50%;
+    left: 30%;
+    transform: rotate(45deg);
+    animation-delay: 14s;
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+}
+
+.bg-shape-9 {
+    width: 55px;
+    height: 55px;
+    border-color: #8a2be2;
+    top: 15%;
+    left: 40%;
+    border-radius: 50%;
+    animation-delay: 16s;
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+}
+
+.bg-shape-10 {
+    width: 75px;
+    height: 75px;
+    border-color: #39ff14;
+    top: 85%;
+    left: 25%;
+    transform: rotate(60deg);
+    animation-delay: 18s;
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+}
+
+@keyframes bgShapeFloat {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg) scale(1);
+    }
+    25% {
+        transform: translateY(-30px) rotate(90deg) scale(1.1);
+    }
+    50% {
+        transform: translateY(-10px) rotate(180deg) scale(0.9);
+    }
+    75% {
+        transform: translateY(-40px) rotate(270deg) scale(1.05);
+    }
+}
+
+/* Background Particles */
+.bg-particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.bg-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: #00ffff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px currentColor;
+    opacity: 1 !important;
+    visibility: visible !important;
+    animation: bgParticleFloat 12s linear infinite;
+}
+
+.bg-particle:nth-child(1) { left: 5%; background: #ff00ff; animation-delay: 0s; }
+.bg-particle:nth-child(2) { left: 15%; background: #00ffff; animation-delay: 1s; }
+.bg-particle:nth-child(3) { left: 25%; background: #ff0080; animation-delay: 2s; }
+.bg-particle:nth-child(4) { left: 35%; background: #8a2be2; animation-delay: 3s; }
+.bg-particle:nth-child(5) { left: 45%; background: #39ff14; animation-delay: 4s; }
+.bg-particle:nth-child(6) { left: 55%; background: #ff00ff; animation-delay: 5s; }
+.bg-particle:nth-child(7) { left: 65%; background: #00ffff; animation-delay: 6s; }
+.bg-particle:nth-child(8) { left: 75%; background: #ff0080; animation-delay: 7s; }
+.bg-particle:nth-child(9) { left: 85%; background: #8a2be2; animation-delay: 8s; }
+.bg-particle:nth-child(10) { left: 95%; background: #39ff14; animation-delay: 9s; }
+.bg-particle:nth-child(11) { left: 10%; background: #ff00ff; animation-delay: 10s; }
+.bg-particle:nth-child(12) { left: 30%; background: #00ffff; animation-delay: 11s; }
+.bg-particle:nth-child(13) { left: 50%; background: #ff0080; animation-delay: 1.5s; }
+.bg-particle:nth-child(14) { left: 70%; background: #8a2be2; animation-delay: 2.5s; }
+.bg-particle:nth-child(15) { left: 90%; background: #39ff14; animation-delay: 3.5s; }
+
+@keyframes bgParticleFloat {
+    0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(90vh) scale(1);
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-10vh) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Background Lines */
+.bg-lines {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.bg-line {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, currentColor, transparent);
+    height: 1px;
+    animation: bgLineMove 8s linear infinite;
+}
+
+.bg-line-1 {
+    width: 200px;
+    top: 20%;
+    color: #ff00ff;
+    animation-delay: 0s;
+}
+
+.bg-line-2 {
+    width: 150px;
+    top: 40%;
+    color: #00ffff;
+    animation-delay: 2s;
+}
+
+.bg-line-3 {
+    width: 250px;
+    top: 60%;
+    color: #ff0080;
+    animation-delay: 4s;
+}
+
+.bg-line-4 {
+    width: 180px;
+    top: 80%;
+    color: #8a2be2;
+    animation-delay: 6s;
+}
+
+.bg-line-5 {
+    width: 220px;
+    top: 30%;
+    color: #39ff14;
+    animation-delay: 1s;
+}
+
+@keyframes bgLineMove {
+    0% {
+        left: -250px;
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        left: 100vw;
+        opacity: 0;
+    }
 }
 
 /* Navigation Styles */
@@ -116,9 +416,187 @@ nav {
     align-items: center;
     justify-content: center;
     text-align: center;
-    background: linear-gradient(180deg, #000014 0%, #1a0d26 40%, #2d1b3d 70%, #ff00ff11 100%);
+    background: transparent; /* Let global background show through */
     position: relative;
     overflow: hidden;
+    z-index: 10;
+}
+
+/* Animated Background */
+.animated-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Floating Geometric Shapes */
+.floating-shapes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.shape {
+    position: absolute;
+    border: 2px solid;
+    animation: float 6s ease-in-out infinite;
+}
+
+.shape-1 {
+    width: 60px;
+    height: 60px;
+    border-color: #ff00ff;
+    top: 20%;
+    left: 10%;
+    transform: rotate(45deg);
+    animation-delay: 0s;
+    box-shadow: 0 0 20px #ff00ff;
+}
+
+.shape-2 {
+    width: 40px;
+    height: 40px;
+    border-color: #00ffff;
+    top: 60%;
+    left: 80%;
+    border-radius: 50%;
+    animation-delay: 1s;
+    box-shadow: 0 0 15px #00ffff;
+}
+
+.shape-3 {
+    width: 0;
+    height: 0;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-bottom: 50px solid #ff0080;
+    top: 30%;
+    left: 70%;
+    animation-delay: 2s;
+    filter: drop-shadow(0 0 10px #ff0080);
+}
+
+.shape-4 {
+    width: 50px;
+    height: 50px;
+    border-color: #8a2be2;
+    top: 70%;
+    left: 20%;
+    transform: rotate(30deg);
+    animation-delay: 3s;
+    box-shadow: 0 0 18px #8a2be2;
+}
+
+.shape-5 {
+    width: 35px;
+    height: 35px;
+    border-color: #39ff14;
+    top: 15%;
+    left: 85%;
+    transform: rotate(60deg);
+    animation-delay: 4s;
+    box-shadow: 0 0 12px #39ff14;
+}
+
+.shape-6 {
+    width: 45px;
+    height: 45px;
+    border-color: #ff00ff;
+    top: 80%;
+    left: 60%;
+    border-radius: 50%;
+    animation-delay: 5s;
+    box-shadow: 0 0 16px #ff00ff;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    33% {
+        transform: translateY(-20px) rotate(120deg);
+    }
+    66% {
+        transform: translateY(10px) rotate(240deg);
+    }
+}
+
+/* Grid Overlay */
+.grid-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background-image: 
+        linear-gradient(rgba(255, 0, 255, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 0, 255, 0.3) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridPulse 3s ease-in-out infinite;
+    perspective: 1000px;
+    transform: rotateX(60deg) translateY(50%);
+}
+
+@keyframes gridPulse {
+    0%, 100% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Particles */
+.particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #00ffff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #00ffff;
+    animation: particleFloat 8s linear infinite;
+}
+
+.particle:nth-child(1) { left: 10%; animation-delay: 0s; background: #ff00ff; box-shadow: 0 0 10px #ff00ff; }
+.particle:nth-child(2) { left: 20%; animation-delay: 1s; background: #00ffff; box-shadow: 0 0 10px #00ffff; }
+.particle:nth-child(3) { left: 30%; animation-delay: 2s; background: #ff0080; box-shadow: 0 0 10px #ff0080; }
+.particle:nth-child(4) { left: 40%; animation-delay: 3s; background: #8a2be2; box-shadow: 0 0 10px #8a2be2; }
+.particle:nth-child(5) { left: 50%; animation-delay: 4s; background: #39ff14; box-shadow: 0 0 10px #39ff14; }
+.particle:nth-child(6) { left: 60%; animation-delay: 5s; background: #ff00ff; box-shadow: 0 0 10px #ff00ff; }
+.particle:nth-child(7) { left: 70%; animation-delay: 6s; background: #00ffff; box-shadow: 0 0 10px #00ffff; }
+.particle:nth-child(8) { left: 80%; animation-delay: 7s; background: #ff0080; box-shadow: 0 0 10px #ff0080; }
+.particle:nth-child(9) { left: 90%; animation-delay: 1.5s; background: #8a2be2; box-shadow: 0 0 10px #8a2be2; }
+.particle:nth-child(10) { left: 95%; animation-delay: 3.5s; background: #39ff14; box-shadow: 0 0 10px #39ff14; }
+
+@keyframes particleFloat {
+    0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px) scale(1);
+        opacity: 0;
+    }
 }
 
 /* Synthwave Mountain Silhouettes */
@@ -191,6 +669,7 @@ nav {
     z-index: 10;
     max-width: 800px;
     padding: 0 2rem;
+    pointer-events: auto;
 }
 
 .hero-content h1 {
@@ -268,6 +747,9 @@ section {
     padding-left: 2rem;
     padding-right: 2rem;
     position: relative;
+    z-index: 10; /* Above background */
+    background: rgba(0, 0, 0, 0.3); /* Semi-transparent so background shows through */
+    backdrop-filter: blur(2px);
 }
 
 .section-title {
