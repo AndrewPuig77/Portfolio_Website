@@ -423,7 +423,6 @@ nav {
     text-align: center;
     background: transparent; /* Let global background show through */
     position: relative;
-    overflow: hidden;
     z-index: 10;
 }
 
@@ -532,31 +531,6 @@ nav {
     }
 }
 
-/* Grid Overlay */
-.grid-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 40%;
-    background-image: 
-        linear-gradient(rgba(255, 0, 255, 0.3) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 0, 255, 0.3) 1px, transparent 1px);
-    background-size: 50px 50px;
-    animation: gridPulse 3s ease-in-out infinite;
-    perspective: 1000px;
-    transform: rotateX(60deg) translateY(50%);
-}
-
-@keyframes gridPulse {
-    0%, 100% {
-        opacity: 0.6;
-    }
-    50% {
-        opacity: 1;
-    }
-}
-
 /* Particles */
 .particles {
     position: absolute;
@@ -604,54 +578,22 @@ nav {
     }
 }
 
-/* Synthwave Mountain Silhouettes */
-#hero::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
+/* 3D Holographic Floor Container */
+#hero-3d-floor {
+    position: fixed;
+    top: 0;
     left: 0;
-    right: 0;
-    height: 40%;
-    clip-path: polygon(0% 100%, 0% 60%, 15% 70%, 25% 50%, 40% 65%, 55% 45%, 70% 60%, 85% 40%, 100% 55%, 100% 100%);
-    background: linear-gradient(to top, rgba(255, 0, 255, 0.6), rgba(255, 0, 255, 0.2));
-    z-index: 0;
-    animation: mountainGlow 4s ease-in-out infinite alternate;
-}
-
-/* Second mountain layer */
-#hero::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 25%;
-    clip-path: polygon(0% 100%, 0% 80%, 20% 70%, 35% 85%, 50% 60%, 65% 75%, 80% 55%, 95% 70%, 100% 65%, 100% 100%);
-    background: linear-gradient(to top, rgba(0, 255, 255, 0.7), rgba(0, 255, 255, 0.3));
+    width: 100vw;
+    height: 100vh;
     z-index: 1;
-    animation: mountainGlow2 3s ease-in-out infinite alternate;
-}
-
-@keyframes mountainGlow {
-    0% { 
-        opacity: 0.6;
-        filter: drop-shadow(0 0 20px rgba(255, 0, 255, 0.5));
-    }
-    100% { 
-        opacity: 1;
-        filter: drop-shadow(0 0 40px rgba(255, 0, 255, 0.8));
-    }
-}
-
-@keyframes mountainGlow2 {
-    0% { 
-        opacity: 0.7;
-        filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.5));
-    }
-    100% { 
-        opacity: 1;
-        filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.8));
-    }
+    pointer-events: none;
+    background: transparent;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    max-width: none;
+    max-height: none;
 }
 
 @keyframes float {
