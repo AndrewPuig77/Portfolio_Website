@@ -345,11 +345,12 @@ nav {
     width: 100%;
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(10px);
-    z-index: 1000;
+    z-index: 10000; /* Much higher z-index to be above everything */
     padding: 1rem 0;
     transition: all 0.3s ease;
     border-bottom: 2px solid var(--neon-cyan);
     box-shadow: 0 0 20px var(--neon-cyan);
+    pointer-events: auto; /* Ensure clicks work */
 }
 
 .nav-container {
@@ -376,6 +377,8 @@ nav {
     display: flex;
     list-style: none;
     gap: 2rem;
+    pointer-events: auto; /* Ensure clicks work */
+    z-index: 10002; /* Highest z-index */
 }
 
 .nav-links a {
@@ -386,6 +389,8 @@ nav {
     text-transform: uppercase;
     font-weight: bold;
     letter-spacing: 1px;
+    pointer-events: auto; /* Ensure clicks work */
+    z-index: 10001; /* Even higher z-index */
 }
 
 .nav-links a:hover {
