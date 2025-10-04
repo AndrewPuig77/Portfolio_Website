@@ -17,11 +17,11 @@ class HolographicFloor {
         this.gradientFloor = null;
         this.waves = [];
         this.particles = null;
-        this.energyCore = null;
         this.tronTrails = [];
         this.tronBikes = [];
         this.vaporwaveSun = null;
         this.vaporwaveMountains = null;
+        this.vaporwavePalmTrees = null;
         
         this.init();
     }
@@ -38,8 +38,8 @@ class HolographicFloor {
         this.createHolographicGrid();
         this.createEnergyWaves();
         this.createParticleField();
-        this.createEnergyCore();
         this.createVaporwaveMountains();
+        this.createVaporwavePalmTrees();
         this.createTronTrails();
         this.createVaporwaveSun();
         this.setupEventListeners();
@@ -210,31 +210,7 @@ class HolographicFloor {
         this.scene.add(this.particles);
     }
     
-    createEnergyCore() {
-        // Central energy core that pulses
-        const coreGeometry = new THREE.SphereGeometry(0.3, 16, 16);
-        const coreMaterial = new THREE.MeshBasicMaterial({
-            color: 0xff00ff,
-            transparent: true,
-            opacity: 0.8
-        });
-        
-        this.energy = new THREE.Mesh(coreGeometry, coreMaterial);
-        this.energy.position.set(0, -2, -5);
-        this.scene.add(this.energy);
-        
-        // Add glow effect
-        const glowGeometry = new THREE.SphereGeometry(0.6, 16, 16);
-        const glowMaterial = new THREE.MeshBasicMaterial({
-            color: 0xff00ff,
-            transparent: true,
-            opacity: 0.2,
-            blending: THREE.AdditiveBlending
-        });
-        
-        const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-        this.energy.add(glow);
-    }
+
     
     createVaporwaveMountains() {
         // Create classic vaporwave wireframe mountains on the sides only
@@ -345,6 +321,156 @@ class HolographicFloor {
         group.add(wireframeMountain);
         
         return group;
+    }
+    
+    createVaporwavePalmTrees() {
+        // Create multiple stylized vaporwave palm trees around the platform edges only
+        this.vaporwavePalmTrees = new THREE.Group();
+        
+        // Position palm trees around the perimeter of the 70x70 grid
+        const gridSize = 70;
+        const edgeOffset = 8; // Distance from the grid edge
+        
+        // Define positions only at the edges, avoiding the center racing area
+        const treePositions = [
+            // Front edges (closer to camera)
+            { x: -gridSize/2 - edgeOffset, z: gridSize/2 + edgeOffset }, // Front left corner
+            { x: gridSize/2 + edgeOffset, z: gridSize/2 + edgeOffset },  // Front right corner
+            { x: -20, z: gridSize/2 + edgeOffset }, // Front left-center
+            { x: 20, z: gridSize/2 + edgeOffset },  // Front right-center
+            
+            // Back edges (toward the sun) - these are the ones you said were fine!
+            { x: -25, z: -gridSize/2 - edgeOffset }, // Back left (next to sun)
+            { x: 25, z: -gridSize/2 - edgeOffset },  // Back right (next to sun)
+            
+            // Side edges only (avoiding mountains that are at x = ±45, ±65, ±85)
+            { x: -gridSize/2 - edgeOffset, z: 15 }, // Left side front (safe)
+            { x: -36, z: -5 }, // Left side center (moved 3 grids away from center)
+            { x: gridSize/2 + edgeOffset, z: 15 },  // Right side front (safe)
+            { x: 36, z: -5 }   // Right side center (moved 3 grids away from center)
+        ];
+        
+        treePositions.forEach((pos, index) => {
+            const treeGroup = this.createSinglePalmTree();
+            
+            // Position at platform edges only
+            treeGroup.position.set(pos.x, -5, pos.z);
+            
+            // Vary scale slightly for natural look
+            const scale = 0.6 + (Math.random() * 0.3);
+            treeGroup.scale.setScalar(scale);
+            
+            // Add some rotation variety, facing generally inward
+            treeGroup.rotation.y = (Math.random() - 0.5) * Math.PI * 0.4;
+            
+            this.vaporwavePalmTrees.add(treeGroup);
+        });
+        
+        this.scene.add(this.vaporwavePalmTrees);
+    }
+    
+    createSinglePalmTree() {
+        // Create a single stylized vaporwave palm tree
+        const treeGroup = new THREE.Group();
+        
+        // Palm tree trunk - cylindrical with slight taper
+        const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.5, 12, 8);
+        const trunkMaterial = new THREE.MeshBasicMaterial({
+            color: 0x8a2be2, // Purple trunk matching website neon-purple
+            transparent: true,
+            opacity: 0.8
+        });
+        
+        const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+        trunk.position.set(0, 1, 0); // Position trunk above ground
+        treeGroup.add(trunk);
+        
+        // Trunk wireframe for vaporwave aesthetic
+        const trunkWireframe = new THREE.WireframeGeometry(trunkGeometry);
+        const trunkWireframeMaterial = new THREE.LineBasicMaterial({
+            color: 0xff0080, // Hot pink wireframe
+            transparent: true,
+            opacity: 0.9,
+            linewidth: 2
+        });
+        
+        const trunkLines = new THREE.LineSegments(trunkWireframe, trunkWireframeMaterial);
+        trunkLines.position.copy(trunk.position);
+        treeGroup.add(trunkLines);
+        
+        // Create 6 palm fronds radiating from the top
+        const frondCount = 6;
+        for (let i = 0; i < frondCount; i++) {
+            const angle = (i / frondCount) * Math.PI * 2;
+            const frond = this.createPalmFrond();
+            
+            // Position fronds at top of trunk
+            frond.position.set(0, 7, 0);
+            frond.rotation.y = angle;
+            frond.rotation.z = -0.3; // Slight droop
+            
+            treeGroup.add(frond);
+        }
+        
+        return treeGroup;
+    }
+    
+    createPalmFrond() {
+        // Create a single palm frond using curve geometry
+        const frondGroup = new THREE.Group();
+        
+        // Main frond curve
+        const curve = new THREE.QuadraticBezierCurve3(
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(2, 1, 1),
+            new THREE.Vector3(4, -0.5, 2)
+        );
+        
+        // Create frond geometry along the curve
+        const tubeGeometry = new THREE.TubeGeometry(curve, 20, 0.2, 8, false);
+        const frondMaterial = new THREE.MeshBasicMaterial({
+            color: 0x00ffff, // Cyan frond
+            transparent: true,
+            opacity: 0.7
+        });
+        
+        const frond = new THREE.Mesh(tubeGeometry, frondMaterial);
+        frondGroup.add(frond);
+        
+        // Add wireframe outline to frond
+        const frondWireframe = new THREE.WireframeGeometry(tubeGeometry);
+        const frondWireframeMaterial = new THREE.LineBasicMaterial({
+            color: 0xff0080, // Hot pink outline
+            transparent: true,
+            opacity: 0.8,
+            linewidth: 2
+        });
+        
+        const frondLines = new THREE.LineSegments(frondWireframe, frondWireframeMaterial);
+        frondGroup.add(frondLines);
+        
+        // Add smaller side fronds
+        for (let i = 0; i < 8; i++) {
+            const t = (i + 1) / 9; // Position along main frond
+            const point = curve.getPointAt(t);
+            
+            // Create small side frond
+            const sideFrondGeometry = new THREE.PlaneGeometry(0.8, 0.1);
+            const sideFrondMaterial = new THREE.MeshBasicMaterial({
+                color: 0x39ff14, // Neon green
+                transparent: true,
+                opacity: 0.6,
+                side: THREE.DoubleSide
+            });
+            
+            const sideFrond = new THREE.Mesh(sideFrondGeometry, sideFrondMaterial);
+            sideFrond.position.copy(point);
+            sideFrond.rotation.z = Math.random() * 0.5 - 0.25; // Random angle
+            
+            frondGroup.add(sideFrond);
+        }
+        
+        return frondGroup;
     }
     
     createTronTrails() {
@@ -511,15 +637,7 @@ class HolographicFloor {
             this.particles.rotation.y += 0.002;
         }
         
-        // Animate energy core
-        if (this.energy) {
-            this.energy.rotation.y += 0.02;
-            this.energy.scale.setScalar(1 + Math.sin(this.time * 2) * 0.1);
-            
-            // Change color based on time
-            const hue = (this.time * 0.1) % 1;
-            this.energy.material.color.setHSL(hue, 1, 0.5);
-        }
+
         
         // Grid animation
         if (this.grid) {
@@ -873,6 +991,22 @@ class HolographicFloor {
             this.vaporwaveMountains.children.forEach(child => {
                 if (child.geometry) child.geometry.dispose();
                 if (child.material) child.material.dispose();
+            });
+        }
+        
+        // Clean up vaporwave palm tree
+        if (this.vaporwavePalmTree) {
+            this.scene.remove(this.vaporwavePalmTree);
+            this.vaporwavePalmTree.children.forEach(child => {
+                if (child.geometry) child.geometry.dispose();
+                if (child.material) child.material.dispose();
+                // Clean up nested children (fronds)
+                if (child.children) {
+                    child.children.forEach(grandChild => {
+                        if (grandChild.geometry) grandChild.geometry.dispose();
+                        if (grandChild.material) grandChild.material.dispose();
+                    });
+                }
             });
         }
         
