@@ -12,6 +12,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
 <body>
+    <!-- 3D Holographic Floor - positioned first for full screen coverage -->
+    <canvas id="hero-3d-floor"></canvas>
+    
     <!-- Full-Screen Animated Background -->
     <div class="global-bg">
         <div class="bg-grid"></div>
@@ -77,7 +80,6 @@
                 <div class="shape shape-5"></div>
                 <div class="shape shape-6"></div>
             </div>
-            <div class="grid-overlay"></div>
             <div class="particles">
                 <div class="particle"></div>
                 <div class="particle"></div>
@@ -241,6 +243,9 @@
         <p>&copy; 2025 Andrew Puig.</p>
     </footer>
 
+    <!-- Three.js for 3D effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="js/holographic-floor.js"></script>
     <script src="js/main.js"></script>
     <script src="js/gsap-animations.js"></script>
 </body>
