@@ -23,6 +23,12 @@ class HolographicFloor {
         this.vaporwaveMountains = null;
         this.vaporwavePalmTrees = null;
         
+        // Performance monitoring
+        this.frameCount = 0;
+        this.lastTime = Date.now();
+        this.fps = 60;
+        this.lowPerformanceMode = false;
+        
         this.init();
     }
     
@@ -70,7 +76,7 @@ class HolographicFloor {
             antialias: true 
         });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Reduced for performance
         this.renderer.setClearColor(0x000000, 0);
     }
     
@@ -170,8 +176,8 @@ class HolographicFloor {
     }
     
     createParticleField() {
-        // Floating particles above the grid
-        const particleCount = 50;
+        // Floating particles above the grid - reduced count
+        const particleCount = 25; // Reduced from 50 for performance
         const geometry = new THREE.BufferGeometry();
         const positions = new Float32Array(particleCount * 3);
         const colors = new Float32Array(particleCount * 3);
@@ -227,15 +233,14 @@ class HolographicFloor {
     }
     
     createMountainSide(parentGroup, side, sideName) {
-        // Create multiple mountain ranges for depth with different color schemes
+        // Create multiple mountain ranges for depth with different color schemes - reduced for performance
         const ranges = [
-            { distance: 45, height: 20, segments: 6, opacity: 0.9, colorScheme: 'near' },
-            { distance: 65, height: 35, segments: 8, opacity: 0.7, colorScheme: 'mid' },
-            { distance: 85, height: 45, segments: 10, opacity: 0.5, colorScheme: 'far' }
+            { distance: 45, height: 20, segments: 4, opacity: 0.9, colorScheme: 'near' }, // Reduced segments
+            { distance: 65, height: 35, segments: 6, opacity: 0.7, colorScheme: 'mid' }    // Removed far range
         ];
         
         ranges.forEach((range, rangeIndex) => {
-            const mountainCount = 4 + rangeIndex; // More mountains in back ranges
+            const mountainCount = 2 + rangeIndex; // Reduced mountain count for performance
             
             for (let i = 0; i < mountainCount; i++) {
                 // Position mountains along the side
@@ -398,8 +403,8 @@ class HolographicFloor {
         trunkLines.position.copy(trunk.position);
         treeGroup.add(trunkLines);
         
-        // Create 6 palm fronds radiating from the top
-        const frondCount = 6;
+        // Create 4 palm fronds radiating from the top - reduced for performance
+        const frondCount = 4; // Reduced from 6
         for (let i = 0; i < frondCount; i++) {
             const angle = (i / frondCount) * Math.PI * 2;
             const frond = this.createPalmFrond();
@@ -449,8 +454,8 @@ class HolographicFloor {
         const frondLines = new THREE.LineSegments(frondWireframe, frondWireframeMaterial);
         frondGroup.add(frondLines);
         
-        // Add smaller side fronds
-        for (let i = 0; i < 8; i++) {
+        // Add smaller side fronds - reduced count
+        for (let i = 0; i < 4; i++) { // Reduced from 8
             const t = (i + 1) / 9; // Position along main frond
             const point = curve.getPointAt(t);
             
@@ -474,17 +479,13 @@ class HolographicFloor {
     }
     
     createTronTrails() {
-        // Create multiple Tron light cycle trails
-        const trailCount = 8; // More bikes for more action
+        // Create multiple Tron light cycle trails - reduced for performance
+        const trailCount = 4; // Reduced from 8 for better performance
         const colors = [
             0x00ffff, // Cyan
             0xff00ff, // Magenta
             0xff0080, // Hot Pink
-            0x39ff14, // Neon Green
-            0xffff00, // Yellow
-            0xff4500, // Orange Red
-            0x8a2be2, // Blue Violet
-            0x00ff80  // Spring Green
+            0x39ff14  // Neon Green
         ];
         
         for (let i = 0; i < trailCount; i++) {
@@ -507,7 +508,7 @@ class HolographicFloor {
                     z: (Math.random() - 0.5) * 2
                 },
                 speed: 0.08 + Math.random() * 0.06, // Much slower
-                maxPoints: 300, // 5 seconds at 60fps (increased from 180)
+                maxPoints: 150, // Reduced trail length for performance (was 300)
                 turnCooldown: 0,
                 id: i
             };
@@ -620,6 +621,24 @@ class HolographicFloor {
         
         this.time += 0.01;
         
+        // Performance optimization - skip some animations on every other frame
+        const skipFrame = Math.floor(this.time * 60) % 2 === 0;
+        
+        // Monitor performance and enable low performance mode if needed
+        this.frameCount++;
+        const currentTime = Date.now();
+        if (currentTime - this.lastTime > 1000) {
+            this.fps = this.frameCount;
+            this.frameCount = 0;
+            this.lastTime = currentTime;
+            
+            // Enable low performance mode if FPS is consistently low
+            if (this.fps < 30 && !this.lowPerformanceMode) {
+                this.lowPerformanceMode = true;
+                console.log('🐌 Low performance detected, enabling optimizations...');
+            }
+        }
+        
         // Animate energy waves
         this.waves.forEach((wave, index) => {
             const scale = 1 + Math.sin(this.time * wave.userData.speed + wave.userData.phase) * 0.5;
@@ -627,8 +646,8 @@ class HolographicFloor {
             wave.material.opacity = 0.6 - scale * 0.2;
         });
         
-        // Animate particles
-        if (this.particles) {
+        // Animate particles (less frequently)
+        if (this.particles && (!skipFrame || !this.lowPerformanceMode)) {
             const positions = this.particles.geometry.attributes.position.array;
             for (let i = 0; i < positions.length; i += 3) {
                 positions[i + 1] += Math.sin(this.time + positions[i]) * 0.01;
@@ -1016,15 +1035,22 @@ class HolographicFloor {
     }
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    // Wait for Three.js to load
-    if (typeof THREE !== 'undefined') {
-        window.holographicFloor = new HolographicFloor();
+// Initialize when script loads - handle both immediate and deferred loading
+(function initializeHolographicFloor() {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', createScene);
     } else {
-        console.error('❌ Three.js not loaded for holographic floor');
+        createScene();
     }
-});
+    
+    function createScene() {
+        if (typeof THREE !== 'undefined') {
+            window.holographicFloor = new HolographicFloor();
+        } else {
+            console.error('❌ Three.js not loaded for holographic floor');
+        }
+    }
+})();
 
 // Cleanup
 window.addEventListener('beforeunload', () => {
