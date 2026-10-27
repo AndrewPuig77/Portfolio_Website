@@ -21,9 +21,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 window.addEventListener('scroll', () => {
     const nav = document.querySelector('nav');
     if (window.scrollY > 100) {
-        nav.style.background = 'rgba(15, 23, 42, 0.98)';
+        nav.style.background = 'rgba(5, 0, 15, 0.95)';
     } else {
-        nav.style.background = 'rgba(15, 23, 42, 0.95)';
+        nav.style.background = 'rgba(0, 0, 0, 0.9)';
     }
 });
 

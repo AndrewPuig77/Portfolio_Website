@@ -12,49 +12,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
 <body>
-    <!-- 3D Holographic Floor - positioned first for full screen coverage -->
-    <canvas id="hero-3d-floor"></canvas>
-    
-    <!-- Full-Screen Animated Background -->
-    <div class="global-bg">
-        <div class="bg-grid"></div>
-        <div class="bg-shapes">
-            <div class="bg-shape bg-shape-1"></div>
-            <div class="bg-shape bg-shape-2"></div>
-            <div class="bg-shape bg-shape-3"></div>
-            <div class="bg-shape bg-shape-4"></div>
-            <div class="bg-shape bg-shape-5"></div>
-            <div class="bg-shape bg-shape-6"></div>
-            <div class="bg-shape bg-shape-7"></div>
-            <div class="bg-shape bg-shape-8"></div>
-            <div class="bg-shape bg-shape-9"></div>
-            <div class="bg-shape bg-shape-10"></div>
-        </div>
-        <div class="bg-particles">
-            <div class="bg-particle"></div>
-            <div class="bg-particle"></div>
-            <div class="bg-particle"></div>
-            <div class="bg-particle"></div>
-            <div class="bg-particle"></div>
-            <div class="bg-particle"></div>
-            <div class="bg-particle"></div>
-            <div class="bg-particle"></div>
-            <div class="bg-particle"></div>
-            <div class="bg-particle"></div>
-            <div class="bg-particle"></div>
-            <div class="bg-particle"></div>
-            <div class="bg-particle"></div>
-            <div class="bg-particle"></div>
-            <div class="bg-particle"></div>
-        </div>
-        <div class="bg-lines">
-            <div class="bg-line bg-line-1"></div>
-            <div class="bg-line bg-line-2"></div>
-            <div class="bg-line bg-line-3"></div>
-            <div class="bg-line bg-line-4"></div>
-            <div class="bg-line bg-line-5"></div>
-        </div>
-    </div>
+    <!-- Animated synthwave background (js/synthwave-bg.js) -->
+    <canvas id="bg-scene" aria-hidden="true"></canvas>
 
     <!-- Navigation -->
     <nav>
@@ -71,28 +30,6 @@
 
     <!-- Hero Section -->
     <section id="hero">
-        <div class="animated-bg">
-            <div class="floating-shapes">
-                <div class="shape shape-1"></div>
-                <div class="shape shape-2"></div>
-                <div class="shape shape-3"></div>
-                <div class="shape shape-4"></div>
-                <div class="shape shape-5"></div>
-                <div class="shape shape-6"></div>
-            </div>
-            <div class="particles">
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-            </div>
-        </div>
         <div class="hero-content">
             <h1>Hi, I'm Andrew Puig</h1>
             <p class="subtitle">Full Stack developer</p>
@@ -229,6 +166,25 @@
                     </div>
                 </div>
             </div>
+
+            <div class="project-card">
+                <div class="project-image">uHackEDU</div>
+                <div class="project-content">
+                    <h3 class="project-title">uHackEDU</h3>
+                    <p class="project-description">AI study buddy desktop app started at ShellHacks 2024 and later completed. Enter a topic, course and school to get a tailored lesson with LaTeX math, related YouTube videos, follow-up questions, practice problems with instant feedback, quizzes, flashcards, and an exportable PDF of study notes. A JavaFX front end runs Python scripts that call the Gemini API.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Java</span>
+                        <span class="tech-tag">JavaFX</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Gemini API</span>
+                        <span class="tech-tag">YouTube Data API</span>
+                        <span class="tech-tag">Maven</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/AndrewPuig77/2024-shellhack" target="_blank" class="project-link">GitHub</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -260,9 +216,16 @@
         <p>&copy; 2025 Andrew Puig.</p>
     </footer>
 
-    <!-- Three.js for 3D effects -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script defer src="js/holographic-floor.js"></script>
+    <!-- Three.js for the 3D background -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script type="module" src="js/synthwave-bg.js"></script>
     <script src="js/main.js"></script>
     <script src="js/gsap-animations.js"></script>
 </body>
