@@ -33,7 +33,7 @@ document.addEventListener('click', (event) => {
 
 // Highlight the nav link for the section currently in view
 const linkFor = new Map(
-    [...navLinks.querySelectorAll('a')].map((link) => [link.getAttribute('href').slice(1), link])
+    [...navLinks.querySelectorAll('a[href^="#"]')].map((link) => [link.getAttribute('href').slice(1), link])
 );
 const sectionObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -75,6 +75,10 @@ document.querySelectorAll('.copy-email').forEach((button) => {
             showToast(button.dataset.email);
         }
     });
+});
+
+document.querySelectorAll('[data-print]').forEach((button) => {
+    button.addEventListener('click', () => window.print());
 });
 
 document.getElementById('year').textContent = new Date().getFullYear();
