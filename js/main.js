@@ -1,51 +1,80 @@
-// Enhanced smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation(); // Stop event bubbling
-        
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            // Add a small delay to ensure the click is registered
-            setTimeout(() => {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }, 10);
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Solidify the nav background once the page is scrolled
+const nav = document.querySelector('.site-nav');
+function updateNavBackground() {
+    nav.classList.toggle('is-scrolled', window.scrollY > 40);
+}
+window.addEventListener('scroll', updateNavBackground, { passive: true });
+updateNavBackground();
+
+// Mobile menu
+const navToggle = document.querySelector('.nav-toggle');
+const navLinks = document.getElementById('nav-links');
+
+function setMenuOpen(open) {
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    navLinks.classList.toggle('is-open', open);
+}
+
+navToggle.addEventListener('click', () => {
+    setMenuOpen(navToggle.getAttribute('aria-expanded') !== 'true');
+});
+navLinks.addEventListener('click', (event) => {
+    if (event.target.closest('a')) setMenuOpen(false);
+});
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setMenuOpen(false);
+});
+document.addEventListener('click', (event) => {
+    if (!nav.contains(event.target)) setMenuOpen(false);
+});
+
+// Highlight the nav link for the section currently in view
+const linkFor = new Map(
+    [...navLinks.querySelectorAll('a')].map((link) => [link.getAttribute('href').slice(1), link])
+);
+const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        linkFor.forEach((link) => link.classList.remove('is-active'));
+        linkFor.get(entry.target.id)?.classList.add('is-active');
+    });
+}, { rootMargin: '-45% 0px -50% 0px' });
+document.querySelectorAll('main section[id]').forEach((section) => sectionObserver.observe(section));
+
+// Type out the hero subtitle
+const typed = document.querySelector('.typed');
+if (typed && !prefersReducedMotion) {
+    const text = typed.textContent;
+    typed.textContent = '';
+    let i = 0;
+    setTimeout(function typeNext() {
+        typed.textContent = text.slice(0, ++i);
+        if (i < text.length) setTimeout(typeNext, 55 + Math.random() * 45);
+    }, 600);
+}
+
+// Copy email to clipboard
+const toast = document.querySelector('.toast');
+let toastTimer;
+function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add('is-visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 2200);
+}
+
+document.querySelectorAll('.copy-email').forEach((button) => {
+    button.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(button.dataset.email);
+            showToast('Email copied to clipboard');
+        } catch {
+            showToast(button.dataset.email);
         }
     });
 });
 
-// Add scroll effect to navigation
-window.addEventListener('scroll', () => {
-    const nav = document.querySelector('nav');
-    if (window.scrollY > 100) {
-        nav.style.background = 'rgba(5, 0, 15, 0.95)';
-    } else {
-        nav.style.background = 'rgba(0, 0, 0, 0.9)';
-    }
-});
-
-// Simple animation on scroll
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Observe all sections for animation
-document.querySelectorAll('section').forEach(section => {
-    section.style.opacity = '0';
-    section.style.transform = 'translateY(20px)';
-    section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(section);
-});
+document.getElementById('year').textContent = new Date().getFullYear();
