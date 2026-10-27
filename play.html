@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Drift | Andrew Puig</title>
+    <meta name="description" content="Neon Drift, a synthwave trail-racing mini game built with plain JavaScript and canvas by Andrew Puig.">
+    <meta name="theme-color" content="#07020f">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Neon Drift | Andrew Puig">
+    <meta property="og:description" content="Outlast the CPU racers. Trails fade, the arena shrinks.">
+    <meta property="og:url" content="https://andrewpuig77.github.io/Portfolio_Website/play.html">
+    <meta property="og:image" content="https://andrewpuig77.github.io/Portfolio_Website/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd319'/%3E%3Cstop offset='1' stop-color='%23ff1f8e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='7' fill='%230b0418'/%3E%3Ccircle cx='16' cy='17' r='10' fill='url(%23g)'/%3E%3Crect x='4' y='19' width='24' height='1.6' fill='%230b0418'/%3E%3Crect x='4' y='22.5' width='24' height='2' fill='%230b0418'/%3E%3Crect x='4' y='26' width='24' height='2.6' fill='%230b0418'/%3E%3C/svg%3E">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="play-page">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="i-arrow-up" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 19V5M5 12l7-7 7 7"/></symbol>
+        <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+        <symbol id="i-pause" viewBox="0 0 24 24"><path fill="currentColor" d="M7 5h4v14H7zM13 5h4v14h-4z"/></symbol>
+        <symbol id="p-extend" viewBox="0 0 24 24"><path fill="#ffe14d" d="M12 2 22 12 12 22 2 12z"/></symbol>
+        <symbol id="p-shrink" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="#39ff8a" stroke-width="3"/><circle cx="12" cy="12" r="3" fill="#39ff8a"/></symbol>
+        <symbol id="p-charge" viewBox="0 0 24 24"><path fill="#ffffff" d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+    </svg>
+
+    <!-- Navigation -->
+    <header class="site-nav">
+        <nav class="nav-container" aria-label="Main">
+            <a href="index.html" class="logo">Andrew Puig</a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#skills">Skills</a></li>
+                <li><a href="index.html#projects">Projects</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="resume.html">Resume</a></li>
+                <li><a href="play.html" class="is-active" aria-current="page">Arcade</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="play-main">
+        <div class="play-head">
+            <p class="section-kicker">Arcade</p>
+            <h1 class="section-title">Neon Drift</h1>
+            <p class="play-tagline">Outlast the CPU racers. Trails fade after a few seconds, and the arena keeps shrinking.</p>
+        </div>
+
+        <div class="game-shell glass">
+            <div class="game-hud">
+                <div class="hud-stat"><span class="hud-label">Score</span><span class="hud-value" id="hud-score">0</span></div>
+                <div class="hud-stat"><span class="hud-label">Round</span><span class="hud-value" id="hud-round">1</span></div>
+                <div class="hud-stat"><span class="hud-label">Best</span><span class="hud-value" id="hud-best">0</span></div>
+                <div class="hud-boost">
+                    <span class="hud-label">Boost</span>
+                    <div class="meter" aria-hidden="true"><span id="hud-boost"></span></div>
+                </div>
+                <div class="hud-effects" id="hud-effects" aria-live="polite"></div>
+            </div>
+
+            <div class="game-stage">
+                <canvas id="game" aria-label="Neon Drift game arena"></canvas>
+
+                <div class="game-overlay">
+                    <div class="game-panel" data-panel="menu">
+                        <h2>Ready to ride?</h2>
+                        <p>You are <span class="swatch" style="--c: #00f0ff"></span> cyan. Don't touch any trail or the wall.</p>
+                        <div class="segmented" role="group" aria-label="Difficulty">
+                            <button type="button" data-difficulty="easy">Easy</button>
+                            <button type="button" data-difficulty="normal">Normal</button>
+                            <button type="button" data-difficulty="hard">Hard</button>
+                        </div>
+                        <p class="panel-note" id="menu-note"></p>
+                        <button type="button" class="btn btn-primary" data-action="start">Start</button>
+                        <p class="panel-hint">Press <kbd>Enter</kbd> to start</p>
+                    </div>
+
+                    <div class="game-panel" data-panel="countdown" hidden>
+                        <p class="countdown-number" id="countdown">3</p>
+                    </div>
+
+                    <div class="game-panel" data-panel="paused" hidden>
+                        <h2>Paused</h2>
+                        <div class="panel-actions">
+                            <button type="button" class="btn btn-primary" data-action="resume">Resume</button>
+                            <button type="button" class="btn btn-ghost" data-action="menu">Quit</button>
+                        </div>
+                        <p class="panel-hint">Press <kbd>P</kbd> to resume</p>
+                    </div>
+
+                    <div class="game-panel" data-panel="cleared" hidden>
+                        <h2 id="cleared-title">Round cleared</h2>
+                        <p class="panel-score">+250</p>
+                        <p>Next round is faster…</p>
+                    </div>
+
+                    <div class="game-panel" data-panel="over" hidden>
+                        <h2>Crashed!</h2>
+                        <p class="panel-score" id="over-score">0</p>
+                        <p id="over-detail"></p>
+                        <div class="panel-actions">
+                            <button type="button" class="btn btn-primary" data-action="start">Play again</button>
+                            <button type="button" class="btn btn-ghost" data-action="menu">Menu</button>
+                        </div>
+                        <p class="panel-hint">Press <kbd>Enter</kbd> to play again</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-controls">
+                <p class="key-hints">
+                    <span><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> or <kbd>WASD</kbd> steer</span>
+                    <span><kbd>Space</kbd> boost</span>
+                    <span><kbd>P</kbd> pause</span>
+                </p>
+                <p class="touch-hints">Swipe to steer · tap the arena to boost</p>
+                <div class="touch-buttons">
+                    <button type="button" class="btn btn-sm btn-primary" data-action="boost"><svg><use href="#i-bolt"/></svg>Boost</button>
+                    <button type="button" class="btn btn-sm btn-ghost" data-action="pause"><svg><use href="#i-pause"/></svg>Pause</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="help-grid">
+            <div class="help-card glass">
+                <h3>Rules</h3>
+                <ul>
+                    <li>Every racer leaves a light trail that lasts about 3 seconds.</li>
+                    <li>Hit any trail (even your own) or the wall and you crash.</li>
+                    <li>Outlast every CPU to clear the round. Each round is faster.</li>
+                    <li>After 15 seconds the arena starts closing in. The edge flashes before it moves.</li>
+                </ul>
+            </div>
+            <div class="help-card glass">
+                <h3>Pickups</h3>
+                <ul class="pickup-list">
+                    <li><svg><use href="#p-extend"/></svg><span><strong>Extend:</strong> your trail lasts 2 seconds longer for a while.</span></li>
+                    <li><svg><use href="#p-shrink"/></svg><span><strong>Shrink:</strong> everyone else's trails are cut in half.</span></li>
+                    <li><svg><use href="#p-charge"/></svg><span><strong>Charge:</strong> your boost is ready instantly.</span></li>
+                </ul>
+            </div>
+            <div class="help-card glass">
+                <h3>Scoring</h3>
+                <ul>
+                    <li>10 points for every second you survive.</li>
+                    <li>100 points each time a CPU crashes while you're still riding.</li>
+                    <li>250 bonus points for clearing a round.</li>
+                    <li>Your best score for each difficulty is saved in this browser.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <p>&copy; <span id="year">2026</span> Andrew Puig</p>
+            <a href="#" class="back-to-top">Back to top<svg><use href="#i-arrow-up"/></svg></a>
+        </div>
+    </footer>
+
+    <div class="toast" role="status" aria-live="polite"></div>
+
+    <script defer src="js/main.js"></script>
+    <script defer src="js/game.js"></script>
+</body>
+</html>

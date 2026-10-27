@@ -1048,6 +1048,354 @@ section {
     color: #dcd3f3;
 }
 
+/* Arcade page (Neon Drift) */
+.play-main {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: calc(var(--nav-height) + 2rem) 1.5rem 5rem;
+}
+
+.play-head {
+    text-align: center;
+    margin-bottom: 1.75rem;
+}
+
+.play-tagline {
+    margin-top: 0.6rem;
+    color: var(--text-muted);
+}
+
+.game-shell {
+    padding: 1rem;
+    scroll-margin-top: calc(var(--nav-height) + 0.5rem);
+}
+
+.game-hud {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.75rem;
+    padding: 0.25rem 0.5rem 1rem;
+}
+
+.hud-stat,
+.hud-boost {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.hud-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+}
+
+.hud-value {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    min-width: 3ch;
+}
+
+.hud-boost {
+    min-width: 140px;
+}
+
+.meter {
+    height: 8px;
+    margin-top: 0.45rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.meter span {
+    display: block;
+    height: 100%;
+    width: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--neon-purple), var(--neon-cyan));
+}
+
+.meter.is-ready span {
+    background: var(--neon-cyan);
+    box-shadow: 0 0 12px var(--neon-cyan);
+}
+
+.hud-effects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-left: auto;
+}
+
+.effect-badge {
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--c);
+    border: 1px solid color-mix(in srgb, var(--c) 50%, transparent);
+    background: color-mix(in srgb, var(--c) 12%, transparent);
+}
+
+.game-stage {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    min-height: 300px;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.game-stage canvas {
+    display: block;
+    border-radius: 12px;
+    box-shadow: 0 0 0 1px rgba(255, 43, 214, 0.25), 0 20px 60px -20px rgba(255, 43, 214, 0.35);
+}
+
+.game-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: rgba(7, 2, 15, 0.55);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    border-radius: 12px;
+}
+
+.game-overlay[hidden],
+.game-panel[hidden] {
+    display: none;
+}
+
+.game-panel {
+    max-width: 420px;
+    padding: 2rem 1.75rem;
+    text-align: center;
+    border-radius: var(--radius-lg);
+    background: rgba(14, 6, 30, 0.85);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.8);
+}
+
+.game-panel[data-panel="countdown"] {
+    background: none;
+    border: 0;
+    box-shadow: none;
+}
+
+.game-panel h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+.game-panel p {
+    color: var(--text-muted);
+    margin-bottom: 1.1rem;
+}
+
+.swatch {
+    display: inline-block;
+    width: 0.8em;
+    height: 0.8em;
+    border-radius: 3px;
+    vertical-align: -0.05em;
+    background: var(--c);
+    box-shadow: 0 0 8px var(--c);
+}
+
+.segmented {
+    display: inline-flex;
+    padding: 4px;
+    margin-bottom: 0.75rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.segmented button {
+    padding: 0.55rem 1rem;
+    border: 0;
+    border-radius: 9px;
+    background: none;
+    color: var(--text-muted);
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.segmented button[aria-pressed="true"] {
+    color: #fff;
+    background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+}
+
+.panel-note {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+}
+
+.panel-hint {
+    margin: 1rem 0 0 !important;
+    font-size: 0.8rem;
+}
+
+.panel-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.panel-score {
+    font-family: var(--font-display);
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: var(--text) !important;
+    margin-bottom: 0.25rem !important;
+}
+
+.countdown-number {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 14vw, 7rem);
+    font-weight: 800;
+    margin: 0 !important;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 24px rgba(255, 43, 214, 0.6));
+}
+
+kbd {
+    display: inline-block;
+    min-width: 1.7em;
+    padding: 0.1rem 0.4rem;
+    margin: 0 0.1rem;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-align: center;
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-bottom-width: 2px;
+}
+
+.game-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem 1.5rem;
+    padding: 1rem 0.5rem 0.25rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.key-hints {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.5rem;
+}
+
+.touch-hints,
+.touch-buttons {
+    display: none;
+}
+
+.touch-buttons {
+    gap: 0.75rem;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .key-hints,
+    .panel-hint {
+        display: none;
+    }
+
+    .touch-hints {
+        display: block;
+    }
+
+    .touch-buttons {
+        display: flex;
+    }
+}
+
+.help-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 1.25rem;
+    margin-top: 1.75rem;
+}
+
+.help-card {
+    padding: 1.5rem;
+}
+
+.help-card h3 {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--neon-cyan);
+    margin-bottom: 0.85rem;
+}
+
+.help-card li {
+    position: relative;
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.93rem;
+    color: #dcd3f3;
+}
+
+.help-card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--neon-pink);
+}
+
+.pickup-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding-left: 0;
+}
+
+.pickup-list li::before {
+    display: none;
+}
+
+.pickup-list svg {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    margin-top: 0.15rem;
+}
+
 /* "Save as PDF" output: a plain one-page document */
 @media print {
     @page {
@@ -1281,6 +1629,22 @@ section {
     .skill-rows div {
         grid-template-columns: 1fr;
         gap: 0.1rem;
+    }
+
+    .play-main {
+        padding: calc(var(--nav-height) + 1.25rem) 0.75rem 4rem;
+    }
+
+    .game-shell {
+        padding: 0.6rem;
+    }
+
+    .game-hud {
+        gap: 0.5rem 1.1rem;
+    }
+
+    .hud-effects {
+        margin-left: 0;
     }
 }
 
